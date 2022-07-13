@@ -19,5 +19,6 @@ namespace api.Domain.Entity
         [JsonProperty("thumbnail")]
         public Thumbnail? Thumbnail { get; set; }
         public bool Favorite { get; set; } 
+        public List<Thumbnail>? ThumbnailComics { get; set;}
     }
 }

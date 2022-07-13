@@ -17,6 +17,8 @@ namespace api.Repository
 
         public async Task<IEnumerable<CharacterResumed>> GetAll(CharacterFilter filter)
         {
+
+
             return await Task.Run(() => 
             {
                 List<CharacterResumed> listCharacter = _requests.GetCharacters(filter);
@@ -26,7 +28,19 @@ namespace api.Repository
                 lock (Const.FavTag)
                 {
                     // Passamos por todos persongens, verificando se está incluso nos favoritos
-                    listCharacter.ForEach(x => x.Favorite = favCharacters.Contains(x.Id));
+                    listCharacter.ForEach(x =>  {
+                        
+                        x.Favorite = favCharacters.Contains(x.Id);
+                        x.ThumbnailComics = new List<Thumbnail>();
+
+                        // Obtendo as histórias do personagens
+                        foreach (CharacterComics item in _requests.GetComics(x.Id))
+                        {
+                            // adicionamos as histórias que o personagem participa
+                            x.ThumbnailComics!.Add(item.Thumbnail!);   
+                        }
+
+                    });
                 }
 
                 lock (Const.DeletedTag)

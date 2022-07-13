@@ -29,13 +29,36 @@ namespace api.Requests
             return response.Data.Results!;
         }
 
+        public List<CharacterComics> GetComics(int id)
+        {            
+            MarvelResponse<List<CharacterComics>> response;
+            Dictionary<string, string> dicParams = new Dictionary<string, string>();
+            string sUrlRequest = "";
+
+            AddSecurityParamsAPI(ref dicParams);
+            dicParams.Add("limit", "5");
+
+            // Adicionamos a url e a query criada para consulta
+            sUrlRequest = QueryHelpers.AddQueryString($"{Url}/{id}/comics", dicParams!);
+
+            // Realiza a requisição  
+            response = api.Util.HttpRequest.Get<MarvelResponse<List<CharacterComics>>>(sUrlRequest);
+
+            if (response.Status.ToLower() != "ok")
+                throw new ArgumentException("Erro durante requisitar personagens");
+
+            return response.Data.Results!;
+        }
+
         private Dictionary<string, string> CreateQueryParams(CharacterFilter filter)
         {
             Dictionary<string, string> dicParams = new Dictionary<string, string>();
             
             AddSecurityParamsAPI(ref dicParams);
 
-            dicParams.Add("nameStartsWith", filter.NameStartsWith);
+            if (filter.NameStartsWith.Length > 0)
+                dicParams.Add("nameStartsWith", filter.NameStartsWith);
+
             dicParams.Add("orderBy", filter.OrderBy);
             dicParams.Add("limit", filter.Limit.ToString());
             dicParams.Add("offset", filter.OffSet.ToString());

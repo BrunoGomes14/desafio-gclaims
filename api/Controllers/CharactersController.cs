@@ -93,7 +93,7 @@ namespace api.Controllers
             catch (Exception err)
             {
                 Console.WriteLine($"ERRO {err.Message}");
-                return StatusCode(500, "Erro interno. Tente novamente.");
+                return StatusCode(500, new DefaultResponse("Erro interno. Tente novamente.", 500));
             }
         }
     }
