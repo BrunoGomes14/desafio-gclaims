@@ -96,6 +96,7 @@ namespace api.Controllers
                 };
 
                 var response = await _repository.GetAll(filter);
+                Console.WriteLine("terminou");
                 return Ok(response);
             }
             catch (ArgumentException err)
