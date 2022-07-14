@@ -33,7 +33,7 @@ namespace api.Controllers
             }
             catch (ArgumentException err)
             {
-                return StatusCode(500, new DefaultResponse(err.Message, 500));
+                return StatusCode(400, new DefaultResponse(err.Message, 400));
             }
             catch (Exception err)
             {
@@ -50,6 +50,10 @@ namespace api.Controllers
                 var response = await _mediator.Send(new CharactersDeleteFavCommand(){Id = id});
                 return Ok(response);
             }
+            catch (ArgumentException err)
+            {
+                return StatusCode(400, new DefaultResponse(err.Message, 400));
+            }
             catch (Exception err)
             {
                 Console.WriteLine($"ERRO {err.Message}");
@@ -64,6 +68,10 @@ namespace api.Controllers
             {
                 var response = await _mediator.Send(new CharactersDeleteCommand(){Id = id});
                 return Ok(response);
+            }
+            catch (ArgumentException err)
+            {
+                return StatusCode(400, new DefaultResponse(err.Message, 400));
             }
             catch (Exception err)
             {
@@ -89,6 +97,10 @@ namespace api.Controllers
 
                 var response = await _repository.GetAll(filter);
                 return Ok(response);
+            }
+            catch (ArgumentException err)
+            {
+                return StatusCode(400, new DefaultResponse(err.Message, 400));
             }
             catch (Exception err)
             {

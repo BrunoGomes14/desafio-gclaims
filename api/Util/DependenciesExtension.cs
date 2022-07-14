@@ -7,11 +7,14 @@ namespace api.Util
 {
     public static class DependenciesExtension
     {
-        public static void AddDependencies(this IServiceCollection services)
+        public static void AddDependencies(this WebApplicationBuilder builder)
         {
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddSingleton<IRepository, CharactersRepository>();
-            services.AddSingleton<IRequests, MavelHttpRequest>();
+            builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+            builder.Services.AddSingleton<IRepository, CharactersRepository>();
+            builder.Services.AddSingleton<IRequests, MavelHttpRequest>();
+
+            var config = builder.Configuration.Get<AppSettings>();
+            builder.Services.AddSingleton<MarvelConfig>(config.MarvelConfig!);
         }
     }
 }

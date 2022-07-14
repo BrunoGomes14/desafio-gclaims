@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.WebUtilities;
 namespace api.Requests
 {
     public class MavelHttpRequest : IRequests
-    {
-        private const string PublicKey = "f3e368f455065fbdd0a785a5dea60933";
-        private const string PrivateKey = "5a7173a05ee5ae7b3fdbed1c7815c2aae475225c";
-        private const string Url = "https://gateway.marvel.com:443/v1/public/characters";    
-        
+    {   
+        private MarvelConfig Config { get; set; }
+
+        public MavelHttpRequest(MarvelConfig config)
+        {
+            Config = config;
+        }
+
         public List<CharacterResumed> GetCharacters(CharacterFilter filter)
         {           
             MarvelResponse<List<CharacterResumed>> response;
@@ -18,7 +21,7 @@ namespace api.Requests
             string sUrlRequest = "";
 
             // Adicionamos a url e a query criada para consulta
-            sUrlRequest = QueryHelpers.AddQueryString(Url, dicParams!);
+            sUrlRequest = QueryHelpers.AddQueryString(Config.Url, dicParams!);
 
             // Realiza a requisição  
             response = api.Util.HttpRequest.Get<MarvelResponse<List<CharacterResumed>>>(sUrlRequest);
@@ -39,7 +42,7 @@ namespace api.Requests
             dicParams.Add("limit", "5");
 
             // Adicionamos a url e a query criada para consulta
-            sUrlRequest = QueryHelpers.AddQueryString($"{Url}/{id}/comics", dicParams!);
+            sUrlRequest = QueryHelpers.AddQueryString($"{Config.Url}/{id}/comics", dicParams!);
 
             // Realiza a requisição  
             response = api.Util.HttpRequest.Get<MarvelResponse<List<CharacterComics>>>(sUrlRequest);
@@ -71,10 +74,10 @@ namespace api.Requests
             long lTimeStamp = DateTime.UtcNow.Ticks;
             string sHash = string.Empty;
         
-            sHash = CreateHashKey(lTimeStamp, PublicKey, PrivateKey);
+            sHash = CreateHashKey(lTimeStamp, Config.PublicKey, Config.PrivateKey);
         
             dicParams.Add("hash", sHash);
-            dicParams.Add("apikey", PublicKey);
+            dicParams.Add("apikey", Config.PublicKey);
             dicParams.Add("ts", lTimeStamp.ToString());
         }
 

@@ -1,6 +1,6 @@
 namespace api.Util
 {
-    public class Const
+    public static class Const
     {
         // Tags de motiramento do objeto
         public const string FavTag = "fav";

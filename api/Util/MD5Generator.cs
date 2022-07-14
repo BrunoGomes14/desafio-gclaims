@@ -3,7 +3,7 @@ using System.Text;
 
 namespace api.Util
 {
-    public class MD5Generator
+    public static class MD5Generator
     {
         public static string CreateHash(string sValue)
         {
